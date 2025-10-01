@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Weather App - Enhanced</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo">🌤</div>
+        <h1>Weatherly</h1>
+      </div>
+    </header>
+
+    <main class="card">
+      <section id="disasterAlerts" style="display:none;margin-bottom:16px;padding:16px 18px;background:#ffebee;border-radius:12px;box-shadow:0 2px 8px #e57373;">
+        <h3 style="margin-top:0;">🌪️🔥 Disaster Prediction & Alerts</h3>
+        <div id="disasterAlertMsg" style="font-size:1.1em;color:#b71c1c;"></div>
+        <div id="emergencyGuide" style="margin-top:8px;color:#333;"></div>
+      </section>
+      <div class="search" style="position:sticky;top:0;z-index:1000;background:#fff;padding:16px 0 12px 0;box-shadow:0 2px 8px #90caf9;">
+        <input id="cityInput" placeholder="Enter city (e.g. Dehradun,IN)" />
+        <button id="searchBtn">Search</button>
+      </div>
+      <section id="aqiAlerts" style="display:none;margin-bottom:16px;padding:16px 18px;background:#fff3e0;border-radius:12px;box-shadow:0 2px 8px #ffcc80;">
+        <h3 style="margin-top:0;">😷 Air Quality & Health Alerts</h3>
+        <div id="aqiValue" style="font-size:1.2em;font-weight:bold;color:#b71c1c;"></div>
+        <div id="aqiAdvice" style="margin-top:8px;color:#333;"></div>
+        <div id="pollenAlert" style="margin-top:8px;color:#388e3c;"></div>
+      </section>
+
+      <section id="weatherInfo" class="weather-info">
+        <div class="hint">Type a city and click Search — details expand on click.</div>
+      </section>
+      <section id="farmingAdvisory" class="advisory-box" style="display:none;">
+        <h2>🌾 Farming Advisory</h2>
+        <p id="advisoryNote"></p>
+        <ul>
+          <li id="fertilizerTip"></li>
+          <li id="irrigationTip"></li>
+          <li id="animalTip"></li>
+          <li id="cropTip"></li>
+        </ul>
+      </section>
+      <!-- Rain Prediction Card -->
+      <section id="rainPredictionCard" class="rain-card" style="display:none;margin-top:24px;">
+        <h2>🌧️ 7-Day Rain Prediction</h2>
+        <div id="rainDays" style="display:flex;gap:12px;flex-wrap:wrap;"></div>
+        <style>
+          .farm-advice {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg,#e3f2fd 70%,#c8e6c9 100%);
+            color: #222;
+            padding: 18px 22px;
+            border-radius: 16px;
+            box-shadow: 0 4px 18px #90caf9;
+            min-width: 240px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s;
+            transform: scale(1);
+          }
+          .farm-advice.show {
+            opacity: 1;
+            transform: scale(1);
+          }
+          .farm-advice ul {
+            margin: 10px 0 0 0;
+            padding-left: 18px;
+          }
+          .farm-advice b {
+            color: #388e3c;
+            font-size: 1.1em;
+          }
+        </style>
+      </section>
+    </main>
+  </div>
+
+  <div id="loading" class="loading hidden">
+    <div class="spinner"></div>
+  </div>
+  <div id="modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card">
+      <button id="closeModal" class="close">Back ←</button>
+      <div id="modalContent" class="modal-content"></div>
+    </div>
+  </div>
+ <!-- Chatbot Floating Button & Card -->
+<div id="chatbot-widget">
+  <button id="chatbot-toggle">💬</button>
+  <div id="chatbot-card" class="hidden">
+    <div class="chatbot-header">
+      <span>🤖 Weather Chatbot</span>
+      <button id="chatbot-close">✖</button>
+    </div>
+    <div id="chatbot-messages" class="chatbot-messages">
+      <div class="bot-msg">Hello! Ask me about today's weather 🌦️</div>
+    </div>
+    <div class="chatbot-input">
+      <input id="chatbot-text" type="text" placeholder="Type your question..." />
+      <button id="chatbot-send">➤</button>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Cookie Consent Banner -->
+  <style>
+    #cookie-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg,#222 60%,#4caf50 100%);
+      color: #fff;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+      z-index: 9999;
+      display: none;
+      opacity: 0;
+      animation: fadeInBanner 1s forwards;
+    }
+    @keyframes fadeInBanner {
+      from { opacity: 0; transform: translateX(-50%) translateY(40px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    #accept-cookie {
+      margin-left: 16px;
+      padding: 8px 20px;
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 1px 4px rgba(76,175,80,0.15);
+      transition: background 0.3s, transform 0.2s;
+    }
+    #accept-cookie:hover {
+      background: #43a047;
+      transform: scale(1.08);
+    }
+  </style>
+  <div id="cookie-banner">
+    🍪 This site uses cookies to enhance your experience.
+    <button id="accept-cookie">Accept</button>
+  </div>
+  <script>
+    // Cookie consent logic
+    function setCookie(name, value, days) {
+      let expires = "";
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for(let i=0;i < ca.length;i++) {
+        let c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+      }
+      return null;
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      var banner = document.getElementById('cookie-banner');
+      if (!getCookie('cookieAccepted')) {
+        banner.style.display = 'block';
+        // Trigger animation
+        setTimeout(function(){ banner.style.opacity = '1'; }, 50);
+      }
+      document.getElementById('accept-cookie').onclick = function() {
+        setCookie('cookieAccepted', 'yes', 365);
+        // Animate out
+        banner.style.opacity = '0';
+        setTimeout(function(){ banner.style.display = 'none'; }, 400);
+      };
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

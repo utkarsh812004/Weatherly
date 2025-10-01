@@ -1,0 +1,358 @@
+/* Rain Prediction Card */
+.rain-card {
+  background: linear-gradient(135deg,#e3f2fd,#bbdefb);
+  border-left: 6px solid #1976d2;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(25,118,210,0.12);
+  margin-top: 24px;
+  animation: slideUp 0.7s cubic-bezier(.2,.9,.3,1);
+}
+.rain-card h2 {
+  margin: 0 0 14px 0;
+  font-size: 20px;
+  color: #1976d2;
+}
+#rainDays {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.rain-card-day {
+  background: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #90caf9;
+  min-width: 110px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.rain-card-day:hover {
+  transform: scale(1.07);
+  box-shadow: 0 6px 18px #1976d2;
+}
+.rain-card-day .day-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #1976d2;
+}
+.rain-card-day .rain-chance {
+  font-size: 2em;
+  color: #1565c0;
+  font-weight: bold;
+}
+.rain-card-day .rain-label {
+  font-size: 1em;
+  color: #555;
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root{
+  --bg-img: url('image/weather image.jpg');
+  --card-w: 560px;
+  --accent1: #4facfe;
+  --accent2: #00f2fe;
+  --glass: rgba(255,255,255,0.92);
+  --muted: #6b7280;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  background: url("image/weather image.jpg") no-repeat center center fixed;
+
+  margin:0;
+  font-family:'Poppins',system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px;
+  color:#071024;
+}
+
+/* app layout */
+.app{width:100%;max-width:var(--card-w);display:flex;flex-direction:column;gap:12px;align-items:center}
+.app-header{width:100%;display:flex;justify-content:flex-start;align-items:center;color:#fff;padding:8px 12px;border-radius:10px;backdrop-filter: blur(4px);}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{font-size:28px; width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2));box-shadow:0 8px 20px rgba(2,6,23,0.25);color:#fff}
+h1{font-size:18px;margin:0;padding:0;color:#fff}
+
+/* card */
+.card{width:100%;background:var(--glass);border-radius:14px;padding:16px;box-shadow:0 12px 40px rgba(2,6,23,0.4);transition:transform .35s ease}
+.card:hover{transform:translateY(-6px)}
+
+/* search */
+.search{display:flex;gap:8px;align-items:center}
+#cityInput{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(15,23,42,0.07);font-size:15px}
+#searchBtn{padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;cursor:pointer;font-weight:700;box-shadow:0 10px 30px rgba(79,172,254,0.14)}
+#searchBtn:hover{transform:translateY(-2px)}
+
+/* weather area */
+.weather-info{margin-top:14px;min-height:120px;display:flex;flex-direction:column;gap:12px;align-items:stretch;transition:all .5s ease}
+.hint{color:rgba(7,16,36,0.7);padding:18px;text-align:center}
+
+/* card list */
+.row{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.main-left{display:flex;gap:12px;align-items:center}
+.icon-wrap{width:110px;min-width:110px;display:flex;align-items:center;justify-content:center}
+.weather-icon{width:96px;height:96px;filter:drop-shadow(0 10px 24px rgba(2,6,23,0.18))}
+.metrics{display:flex;flex-direction:column;gap:6px}
+.metrics h2{margin:0;font-size:20px}
+.metrics .muted{color:var(--muted);font-size:13px}
+
+/* mini metric cards - clickable */
+.metrics-grid{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+.metric-card{flex:1;min-width:120px;background:linear-gradient(135deg,#ffffff,#f0fbff);padding:10px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.06);cursor:pointer;transition:transform .25s ease, box-shadow .25s ease}
+.metric-card:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(2,6,23,0.12)}
+.metric-card .big{font-size:20px;font-weight:700}
+.metric-card small{display:block;color:var(--muted);margin-top:6px}
+
+/* stats bars */
+.stats{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.stat-row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.progress{flex:1;height:10px;background:rgba(2,6,23,0.06);border-radius:999px;overflow:hidden;margin:0 8px}
+.progress > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#ffd54a,#ff6b6b);width:0%;transition:width .9s cubic-bezier(.2,.9,.3,1)}
+
+/* details */
+.details{display:flex;gap:12px;justify-content:space-between;width:100%;margin-top:8px;font-size:13px;color:#0f172a;opacity:.9}
+
+/* modal */
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,0.5);backdrop-filter:blur(6px);z-index:9999}
+.modal.hidden{display:none}
+.modal-card{width:90%;max-width:720px;background:#fff;border-radius:12px;padding:18px;position:relative;box-shadow:0 30px 90px rgba(2,6,23,0.6);overflow:hidden}
+.close{position:absolute;right:12px;top:12px;border:none;background:transparent;font-size:20px;cursor:pointer}
+
+/* modal content visuals */
+.modal-content{display:flex;flex-direction:column;align-items:center;gap:16px;padding-top:10px}
+.large-value{font-size:64px;font-weight:800}
+.modal-sub{color:var(--muted)}
+
+/* temp visuals */
+.temp-therm{width:60px;height:220px;background:linear-gradient(180deg,#eee,#ddd);border-radius:20px;overflow:hidden;display:flex;align-items:flex-end;box-shadow:inset 0 -6px 18px rgba(0,0,0,0.06)}
+.therm-fill{width:100%;background:linear-gradient(180deg,#ff6b6b,#ffd54a);height:40%;transition:height 1s cubic-bezier(.2,.9,.3,1)}
+
+/* humidity visuals */
+.hum-tank{width:80%;height:220px;border-radius:12px;background:linear-gradient(180deg,#e6f7ff,#d6f0ff);overflow:hidden;display:flex;align-items:flex-end;box-shadow:inset 0 -8px 18px rgba(0,0,0,0.04)}
+.hum-fill{width:100%;background:linear-gradient(180deg,#4facfe,#00f2fe);height:30%;transition:height 1s cubic-bezier(.2,.9,.3,1)}
+
+/* pressure gauge */
+.pressure-gauge{width:220px;height:120px;border-radius:120px 120px 0 0;background:linear-gradient(180deg,#f8fafc,#eef2ff);position:relative;overflow:hidden}
+.g-needle{position:absolute;left:50%;bottom:0;width:2px;height:90px;background:#111;transform-origin:bottom center;transition:transform 1s cubic-bezier(.2,.9,.3,1)}
+
+/* wind line */
+.wind-canvas{width:100%;height:60px;position:relative;background:linear-gradient(90deg,rgba(0,0,0,0.03),transparent);overflow:hidden}
+.wind-line{position:absolute;left:8px;top:50%;height:4px;width:60px;background:linear-gradient(90deg,#a0d2ff,#6fbfff);transform:translateY(-50%);transition:transform 1s cubic-bezier(.2,.9,.3,1)}
+/* fullscreen modal */
+.modal.fullscreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.85);
+}
+
+.modal.fullscreen .modal-card {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  border-radius: 0;
+  padding: 40px 20px;
+  background: transparent;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* video background */
+.modal-bg video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(0.6);
+}
+
+.full-desc {
+  max-width: 800px;
+  font-size: 18px;
+  line-height: 1.6;
+  text-align: center;
+  margin-top: 20px;
+}
+.full-desc-card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 700px;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+  line-height: 1.6;
+  animation: slideUp 0.6s ease forwards;
+  opacity: 0;
+}
+.modal-nav {
+  display:flex;
+  gap:12px;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.modal-nav button {
+  background: rgba(255,255,255,0.2);
+  border:none;
+  padding:10px 16px;
+  border-radius:12px;
+  cursor:pointer;
+  color:#fff;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.modal-nav button:hover {background: rgba(255,255,255,0.35);}
+.modal-nav button.active-tab {background:#fff;color:#111;}
+
+/* Farming Advisory */
+.advisory-box {
+  background: linear-gradient(135deg,#f0f9ff,#e6f7ff);
+  border-left: 6px solid #4facfe;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.1);
+  margin-top: 20px;
+}
+
+.advisory-box h2 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  color: #111;
+}
+
+.advisory-box p {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.advisory-box ul {
+  margin: 0;
+  padding: 0 0 0 20px;
+  list-style: disc;
+  color: #222;
+  font-size: 14px;
+  line-height: 1.6;
+}
+/* Floating Chatbot Styles */
+#chatbot-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+#chatbot-toggle {
+  background: #0078ff;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+}
+
+#chatbot-card {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 300px;
+  max-height: 450px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 6px 15px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hidden { display: none; }
+
+.chatbot-header {
+  background: #0078ff;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatbot-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.bot-msg {
+  background: #f1f1f1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.user-msg {
+  background: #0078ff;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  text-align: right;
+}
+
+.chatbot-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+
+.chatbot-input input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+}
+
+.chatbot-input button {
+  background: #0078ff;
+  color: white;
+  border: none;
+  padding: 0 15px;
+  cursor: pointer;
+}
+
+
+@keyframes slideUp {
+  0% {transform: translateY(50px); opacity:0;}
+  100% {transform: translateY(0); opacity:1;}
+}
+
+
+/* responsive */
+@media (max-width:640px){
+  :root{--card-w:96vw}
+  .icon-wrap{display:none}
+  .metric-card{min-width:45%}
+  .large-value{font-size:44px}
+  .advisory-box {
+    font-size: 13px;
+    padding: 12px;
+  }
+}
